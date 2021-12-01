@@ -12,7 +12,7 @@ describe 'day01' do
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
-          pending "solves example #{example_id}" do
+          it "solves example #{example_id}" do
             solver = Day01.new(File.read(input_file))
             expect(solver.run_part1).to eq(expected_output)
           end
@@ -25,7 +25,7 @@ describe 'day01' do
       expected_output_file = "#{dir}/day01_part1_myoutput"
       expected_output = File.read(expected_output_file).to_i
 
-      pending "solves myinput" do
+      it "solves myinput" do
         solver = Day01.new(File.read(input_file))
         expect(solver.run_part1).to eq(expected_output)
       end
@@ -40,7 +40,7 @@ describe 'day01' do
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
-          pending "solves example #{example_id}" do
+          it "solves example #{example_id}" do
             solver = Day01.new(File.read(input_file))
             expect(solver.run_part1).to eq(expected_output)
           end
@@ -53,7 +53,7 @@ describe 'day01' do
       expected_output_file = "#{dir}/day01_part2_myoutput"
       expected_output = File.read(expected_output_file).to_i
 
-      pending "solves myinput" do
+      it "solves myinput" do
         solver = Day01.new(File.read(input_file))
         expect(solver.run_part1).to eq(expected_output)
       end
