@@ -12,6 +12,8 @@ class Day01
   end
 
   def run_part2
-    raise NotImplementedError
+    @depth.each_cons(3).each_cons(2).count do |a, b|
+      b.sum > a.sum
+    end
   end
 end
