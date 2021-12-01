@@ -42,7 +42,7 @@ describe 'day05' do
         describe File.basename(input_file) do
           pending "solves example #{example_id}" do
             solver = Day05.new(File.read(input_file))
-            expect(solver.run_part1).to eq(expected_output)
+            expect(solver.run_part2).to eq(expected_output)
           end
         end
       end
@@ -55,7 +55,7 @@ describe 'day05' do
 
       pending "solves myinput" do
         solver = Day05.new(File.read(input_file))
-        expect(solver.run_part1).to eq(expected_output)
+        expect(solver.run_part2).to eq(expected_output)
       end
     end
   end
