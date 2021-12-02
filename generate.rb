@@ -3,11 +3,11 @@
 require 'fileutils'
 
 (1..25).each do |i|
-  2.times do |part|
-    FileUtils.touch("inputs/day#{'%02d' % i}_part#{part+1}_example1")
-    FileUtils.touch("inputs/day#{'%02d' % i}_part#{part+1}_expected1")
-    FileUtils.touch("inputs/day#{'%02d' % i}_part#{part+1}_myinput")
-    FileUtils.touch("inputs/day#{'%02d' % i}_part#{part+1}_myoutput")
+  FileUtils.touch("inputs/day#{'%02d' % i}_myinput")
+  FileUtils.touch("inputs/day#{'%02d' % i}_example1")
+  (1..2).each do |part|
+    FileUtils.touch("inputs/day#{'%02d' % i}_expected1_part#{part}")
+    FileUtils.touch("inputs/day#{'%02d' % i}_myoutput_part#{part}")
   end
   ii = '%02d' % i
 
@@ -47,9 +47,9 @@ describe 'day#{ii}' do
 
   describe 'part1' do
     describe 'official examples' do
-      Dir.glob("\#{dir}/day#{ii}_part1_example*").each do |input_file|
-        example_id = $1 if input_file =~ /example(.+)$/
-        expected_output_file = "\#{dir}/day#{ii}_part1_expected\#{example_id}"
+      Dir.glob("\#{dir}/day#{ii}_example*").each do |input_file|
+        example_id = $1 if input_file =~ /example(\\d+)$/
+        expected_output_file = "\#{dir}/day#{ii}_expected\#{example_id}_part1"
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
@@ -62,8 +62,8 @@ describe 'day#{ii}' do
     end
 
     describe 'my input' do
-      input_file = "\#{dir}/day#{ii}_part1_myinput"
-      expected_output_file = "\#{dir}/day#{ii}_part1_myoutput"
+      input_file = "\#{dir}/day#{ii}_myinput"
+      expected_output_file = "\#{dir}/day#{ii}_myoutput_part1"
       expected_output = File.read(expected_output_file).to_i
 
       custom_it "solves myinput" do
@@ -75,9 +75,9 @@ describe 'day#{ii}' do
 
   describe 'part2' do
     describe 'official examples' do
-      Dir.glob("\#{dir}/day#{ii}_part2_example*").each do |input_file|
-        example_id = $1 if input_file =~ /example(.+)$/
-        expected_output_file = "\#{dir}/day#{ii}_part2_expected\#{example_id}"
+      Dir.glob("\#{dir}/day#{ii}_example*").each do |input_file|
+        example_id = $1 if input_file =~ /example(\\d+)$/
+        expected_output_file = "\#{dir}/day#{ii}_expected\#{example_id}_part2"
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
@@ -90,8 +90,8 @@ describe 'day#{ii}' do
     end
 
     describe 'my input' do
-      input_file = "\#{dir}/day#{ii}_part2_myinput"
-      expected_output_file = "\#{dir}/day#{ii}_part2_myoutput"
+      input_file = "\#{dir}/day#{ii}_myinput"
+      expected_output_file = "\#{dir}/day#{ii}_myoutput_part2"
       expected_output = File.read(expected_output_file).to_i
 
       custom_it "solves myinput" do

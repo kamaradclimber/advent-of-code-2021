@@ -16,9 +16,9 @@ describe 'day12' do
 
   describe 'part1' do
     describe 'official examples' do
-      Dir.glob("#{dir}/day12_part1_example*").each do |input_file|
-        example_id = $1 if input_file =~ /example(.+)$/
-        expected_output_file = "#{dir}/day12_part1_expected#{example_id}"
+      Dir.glob("#{dir}/day12_example*").each do |input_file|
+        example_id = $1 if input_file =~ /example(\d+)$/
+        expected_output_file = "#{dir}/day12_expected#{example_id}_part1"
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
@@ -31,8 +31,8 @@ describe 'day12' do
     end
 
     describe 'my input' do
-      input_file = "#{dir}/day12_part1_myinput"
-      expected_output_file = "#{dir}/day12_part1_myoutput"
+      input_file = "#{dir}/day12_myinput"
+      expected_output_file = "#{dir}/day12_myoutput_part1"
       expected_output = File.read(expected_output_file).to_i
 
       custom_it "solves myinput" do
@@ -44,9 +44,9 @@ describe 'day12' do
 
   describe 'part2' do
     describe 'official examples' do
-      Dir.glob("#{dir}/day12_part2_example*").each do |input_file|
-        example_id = $1 if input_file =~ /example(.+)$/
-        expected_output_file = "#{dir}/day12_part2_expected#{example_id}"
+      Dir.glob("#{dir}/day12_example*").each do |input_file|
+        example_id = $1 if input_file =~ /example(\d+)$/
+        expected_output_file = "#{dir}/day12_expected#{example_id}_part2"
 
         expected_output = File.read(expected_output_file).to_i
         describe File.basename(input_file) do
@@ -59,8 +59,8 @@ describe 'day12' do
     end
 
     describe 'my input' do
-      input_file = "#{dir}/day12_part2_myinput"
-      expected_output_file = "#{dir}/day12_part2_myoutput"
+      input_file = "#{dir}/day12_myinput"
+      expected_output_file = "#{dir}/day12_myoutput_part2"
       expected_output = File.read(expected_output_file).to_i
 
       custom_it "solves myinput" do
