@@ -41,6 +41,7 @@ class Day08
           wires.values.each do |wire|
             next if wire.known?
 
+            puts "#{wire.output_segment} segment cannot be lighten up by #{known_wire.possible_input_segments}"
             wire.reject(known_wire.possible_input_segments)
           end
         end
@@ -50,10 +51,9 @@ class Day08
           puts "#{g_wires.map(&:output_segment).join(', ')} have the same possibilities (#{possibles.join(',')})"
           wires.values.each do |wire|
             next if g_wires.include?(wire)
-            puts "#{wire.output_segment} cannot be correspond to #{possibles.join(', ')}"
+            puts "#{wire.output_segment} segment cannot be lighten up by #{possibles.join(' nor ')}"
             wire.reject(possibles)
           end
-          # TODO: exclude this possibilities from other segments
         end
 
         break if wires.values.all?(&:known?)
