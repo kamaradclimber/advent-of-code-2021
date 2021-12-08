@@ -17,27 +17,22 @@ class Day08
     @lines = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf".split("\n").map { |line| Line.parse(line) }
     @lines.each_with_index.map do |line, index|
       puts "Solving line #{index}"
-      wires = ('a'..'g').map { |input_segment| [input_segment, Wire.new(input_segment)] }.to_h
+      wires = ('a'..'g').map { |output_segment| [output_segment, Wire.new(output_segment)] }.to_h
       line.patterns.each do |digit|
         case digit.size
         when 2
-          digit.each { |input_segment| wires[input_segment].restrict('cf'.chars) }
+          digit.each { |output_segment| wires[output_segment].restrict('cf'.chars) }
         when 3
-          digit.each { |input_segment| wires[input_segment].restrict('acf'.chars) }
+          digit.each { |output_segment| wires[output_segment].restrict('acf'.chars) }
         when 4
-          digit.each { |input_segment| wires[input_segment].restrict('bcdf'.chars) }
+          digit.each { |output_segment| wires[output_segment].restrict('bcdf'.chars) }
         when 7
-          digit.each { |input_segment| wires[input_segment].restrict('abcdefg'.chars) }
+          digit.each { |output_segment| wires[output_segment].restrict('abcdefg'.chars) }
         end
       end
 
       unknown = wires.size
       loop do
-        # solve manually the case of number 1
-        # wires.values.each do |wire|
-        #   next if wire.possible_output_segments == 'cf'.chars
-        #   wire.reject('cf'.chars)
-        # end
         wires.values.each do |wire|
           puts wire
         end
@@ -46,16 +41,16 @@ class Day08
           wires.values.each do |wire|
             next if wire.known?
 
-            wire.reject(known_wire.possible_output_segments)
+            wire.reject(known_wire.possible_input_segments)
           end
         end
-        grouped_wires = wires.values.reject(&:known?).group_by(&:possible_output_segments)
+        grouped_wires = wires.values.reject(&:known?).group_by(&:possible_input_segments)
         self_sufficient_groups = grouped_wires.select { |possibles, g_wires| possibles.size == g_wires.size }
         self_sufficient_groups.each do |possibles, g_wires|
-          puts "#{g_wires.map(&:input_segment).join(', ')} have the same possibilities (#{possibles.join(',')})"
+          puts "#{g_wires.map(&:output_segment).join(', ')} have the same possibilities (#{possibles.join(',')})"
           wires.values.each do |wire|
             next if g_wires.include?(wire)
-            puts "#{wire.input_segment} cannot be correspond to #{possibles.join(', ')}"
+            puts "#{wire.output_segment} cannot be correspond to #{possibles.join(', ')}"
             wire.reject(possibles)
           end
           # TODO: exclude this possibilities from other segments
@@ -77,30 +72,30 @@ class Day08
   end
 
   class Wire
-    attr_reader :possible_output_segments, :input_segment
+    attr_reader :possible_input_segments, :output_segment
 
-    def initialize(input_segment)
-      @input_segment = input_segment
-      @possible_output_segments = 'abcdefg'.chars
+    def initialize(output_segment)
+      @output_segment = output_segment
+      @possible_input_segments = 'abcdefg'.chars
     end
 
     def restrict(possible)
-      @possible_output_segments &= possible
-      return @possible_output_segments.first if @possible_output_segments.one?
-      raise "Impossible!" if @possible_output_segments.empty?
+      @possible_input_segments &= possible
+      return @possible_input_segments.first if @possible_input_segments.one?
+      raise "Impossible!" if @possible_input_segments.empty?
       nil
     end
 
     def reject(impossible)
-      @possible_output_segments -= Array(impossible)
+      @possible_input_segments -= Array(impossible)
     end
 
     def known?
-      @possible_output_segments.one?
+      @possible_input_segments.one?
     end
 
     def to_s
-      "#{@input_segment} -> #{@possible_output_segments.join(', ')}"
+      "#{@possible_input_segments.join(', ')} -> #{@output_segment}"
     end
   end
 
