@@ -5,27 +5,47 @@ class Day14
     polymer, rules = input.split("\n\n")
     @polymer = polymer.chars
     @rules = rules.split("\n").map do |line|
-      [Regexp.last_match(1).chars, Regexp.last_match(2)] if line =~ /(.+) -> (.+)/
+      [$1.chars, $2] if line =~ /(.+) -> (.+)/
     end.to_h
   end
 
   def run_part1
-    10.times do
-      puts "Polymer: #{@polymer.take(10).join('')}, size #{@polymer.size}"
-      @polymer = @polymer.each_cons(2).map do |pair|
-        a, b = pair
-        [a, @rules[pair]].compact
-      end.flatten + [@polymer.last]
-    end
-    frequencies = @polymer.group_by(&:itself).transform_values(&:size)
-    top = frequencies.max_by { |_, count| count }
-    low = frequencies.min_by { |_, count| count }
-    puts "most frequent #{top[0]} with #{top[1]} elements"
-    puts "least frequent #{low[0]} with #{low[1]} elements"
-    top[1] - low[1]
+    run(10)
   end
 
   def run_part2
-    raise NotImplementedError
+    run(40)
+  end
+
+  def run(iterations)
+    pair_count = Hash.new(0)
+    @polymer.each_cons(2) do |pair|
+      pair_count[pair] += 1
+    end
+    iterations.times do
+      new_pairs = Hash.new(0)
+      pair_count.each do |pair, count|
+        a, b = pair
+        c = @rules[pair]
+        new_pairs[[a,c]] += count
+        new_pairs[[c,b]] += count
+      end
+      pair_count = new_pairs
+    end
+
+    frequencies = Hash.new(0)
+    pair_count.each do |pair, count|
+      a, b = pair
+      frequencies[a] += count
+      frequencies[b] += count
+    end
+    frequencies = frequencies.map do |letter, count|
+      c = count / 2
+      c += 1 if letter == @polymer.first || letter == @polymer.last
+      [letter, c]
+    end.to_h
+    top = frequencies.max_by { |_, count| count }
+    low = frequencies.min_by { |_, count| count }
+    top[1] - low[1]
   end
 end
