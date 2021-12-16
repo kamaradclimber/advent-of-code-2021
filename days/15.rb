@@ -28,11 +28,27 @@ class Day15
     distances[[@input.first.size - 1, @input.size - 1]]
   end
 
+  class Node
+    # the object needs to be immutable to be used in sorted set
+    def initialize(x,y, current_cost)
+      @x = x
+      @y = y
+      @current_cost = current_cost
+    end
+
+    include Comparable
+    attr_reader :x,:y,:current_cost
+
+    def <=>(other)
+      @current_cost <=> other.current_cost
+    end
+  end
+
   def run_part2
     visited = Set.new
-    to_explore = []
+    to_explore = SortedSet.new
     distances = {}
-    to_explore << [0, 0]
+    to_explore << Node.new(0, 0, 0)
     distances[[0, 0]] = 0
 
     steps = 0
@@ -40,15 +56,15 @@ class Day15
 
     while to_explore.any?
       steps += 1
-      puts "#{to_explore.size} remaining to explore. #{steps / (Time.now - start).to_f} step/ms" if steps % 100 == 0
-      position = to_explore.min_by { |x, y| distances[[x, y]] }
-      to_explore.delete(position)
-      visited << position
-      neighbors_coords_part2(*position).each do |xx, yy|
-        new_cost = distances[position] + entry_cost_part2(xx, yy)
+      # puts "#{to_explore.size} remaining to explore. #{steps / (Time.now - start).to_f} step/ms" if steps % 100 == 0
+      node = to_explore.first
+      to_explore.delete(node)
+      visited << [node.x, node.y]
+      neighbors_coords_part2(node.x,node.y).each do |xx, yy|
+        new_cost = distances[[node.x,node.y]] + entry_cost_part2(xx, yy)
         if distances[[xx, yy]].nil? || new_cost < distances[[xx, yy]]
           distances[[xx, yy]] = new_cost
-          to_explore << [xx, yy]
+          to_explore << Node.new(xx, yy, new_cost)
         end
       end
     end
