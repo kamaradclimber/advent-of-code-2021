@@ -7,8 +7,6 @@ class Day15
     @input = input.split("\n").map { |line| line.chars.map(&:to_i) }
   end
 
-  INF = 2**32
-
   def run_part1
     visited = Set.new
     to_explore = []
@@ -31,7 +29,48 @@ class Day15
   end
 
   def run_part2
-    raise NotImplementedError
+    visited = Set.new
+    to_explore = []
+    distances = {}
+    to_explore << [0, 0]
+    distances[[0, 0]] = 0
+
+    steps = 0
+    start = Time.now
+
+    while to_explore.any?
+      steps += 1
+      puts "#{to_explore.size} remaining to explore. #{steps / (Time.now - start).to_f} step/ms" if steps % 100 == 0
+      position = to_explore.min_by { |x, y| distances[[x, y]] }
+      to_explore.delete(position)
+      visited << position
+      neighbors_coords_part2(*position).each do |xx, yy|
+        new_cost = distances[position] + entry_cost_part2(xx, yy)
+        if distances[[xx, yy]].nil? || new_cost < distances[[xx, yy]]
+          distances[[xx, yy]] = new_cost
+          to_explore << [xx, yy]
+        end
+      end
+    end
+
+    distances[[@input.first.size * 5 - 1, @input.size * 5 - 1]]
+  end
+
+  def entry_cost_part2(x, y)
+    qx, rx = x.divmod(@input.first.size)
+    qy, ry = y.divmod(@input.size)
+    delta = qx + qy
+
+    full = (@input[ry][rx] + delta)
+    _q, r = full.divmod(9)
+    r.zero? ? 9 : r
+  end
+
+  def neighbors_coords_part2(x, y)
+    coords = [[x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1]]
+    coords.select do |xx, yy|
+      xx >= 0 && xx < @input.first.size * 5 && yy >= 0 && yy < @input.size * 5
+    end
   end
 
   def neighbors_coords(x, y)
