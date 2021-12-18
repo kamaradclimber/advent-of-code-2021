@@ -38,6 +38,11 @@ class Day18
       @subtrees.each do |t|
         t.ancestor = self
       end
+      @height = @subtrees.map(&:height).max + 1
+    end
+
+    def update_height!
+      @height = @subtrees.map(&:update_height!).max + 1
     end
 
     def dup
@@ -48,9 +53,7 @@ class Day18
 
     attr_reader :subtrees
 
-    def height
-      subtrees.map(&:height).max + 1
-    end
+    attr_accessor :height
 
     def magnitude
       raise "Tree has more than 2 subtrees" if @subtrees.size != 2
@@ -123,6 +126,7 @@ class Day18
       i = self.ancestor.subtrees.find_index(self)
       self.ancestor.subtrees[i] = new_self
       new_self.ancestor = self.ancestor
+      top_level_ancestor.update_height!
       new_self
     end
 
@@ -187,6 +191,7 @@ class Day18
     def height
       0
     end
+    alias_method :update_height!, :height
     def split?
       @element >= 10
     end
